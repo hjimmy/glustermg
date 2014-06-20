@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/classes" path="src/main/java"/>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/J2SE-1.5"/>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/jersey-client-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-core-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/jersey-multipart-1.5.jar"/>
+	<classpathentry kind="lib" path="lib/org.gluster.storage.management.client_1.0.0.v20120610-0806.jar"/>
+	<classpathentry kind="lib" path="lib/org.gluster.storage.management.core_1.0.0.v20120610-0806.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>

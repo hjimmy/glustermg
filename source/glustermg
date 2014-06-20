@@ -1,0 +1,115 @@
+#!/bin/bash
+#
+# chkconfig: 35 20 80
+# description: Gluster File System service for volume management
+#
+
+# Get function from functions library
+. /etc/rc.d/init.d/functions
+
+BASE=glustermg
+#PIDFILE=/var/run/$BASE.pid
+COMPILE=python
+GLUSTERMG_BIN=/opt/glustermg/2.4/glustermg/resource/index.py
+PORT=8445
+RETVAL=0
+
+# Start the service $BASE
+start()
+{
+       #pidofproc -p $PIDFILE $GLUSTERD_BIN1 &> /dev/null
+       PID=`ps aux|grep "$COMPILE $GLUSTERMG_BIN $PORT$"|grep -v grep| head -1|awk '{print $2}'` 
+       if [ ! -z $PID ]; then
+           echo "glustermg service is already running with pid $PID"
+           exit 0
+       else
+           echo -n $"Starting $BASE ..."
+           echo
+           $COMPILE $GLUSTERMG_BIN $PORT 2>&1 |tee /tmp/glustermg.log >>/dev/null 2>&1 &
+           sleep 1
+	   errorLine=`cat /tmp/glustermg.log |sed '/^ *$/d' |wc -l`
+           RETVAL=$errorLine
+           if [ $RETVAL -ne 0 ];then
+		echo "Start glustermg failure!"
+		PID=`ps aux|grep "$COMPILE $GLUSTERMG_BIN $PORT$"|grep -v grep| head -1 | awk '{print $2}'`
+		if [ ! -z $PID ];then
+			kill -9 $PID &> /dev/null
+		fi
+
+		CACHE_PID=`ps aux|grep "/usr/bin/memcached -d -m 64 -p 12333" |grep -v grep|awk '{print $2}'`
+		if [ ! -z $CACHE_PID ];then
+			kill -9 $CACHE_PID &> /dev/null
+		fi
+		exit 1
+	   else
+		echo "Start glustermg successfully!" && rm -fr /tmp/glustermg.log && exit 0
+	   fi
+
+       fi
+
+}
+
+# Stop the service $BASE
+stop()
+{
+    echo -n $"Stopping $BASE ..."
+#    killproc $BASE 
+    echo
+
+    CACHE_PID=`ps aux|grep "/usr/bin/memcached -d -m 64 -p 12333" |grep -v grep|awk '{print $2}'`
+    if [ ! -z $CACHE_PID ];then
+	kill -9 $CACHE_PID &> /dev/null
+    fi
+
+    PID=`ps aux|grep "$COMPILE $GLUSTERMG_BIN $PORT$"|grep -v grep| head -1 | awk '{print $2}'`
+    if [ -z $PID ]; then
+        echo "glustermg service is not running"
+        exit 0
+    fi
+
+#    pid=`pidof $COMPILE $GLUSTERMG_BIN $PORT`
+#    kill $pid &> /dev/null
+    kill -9 $PID &> /dev/null
+    if [ $? == 0 ];then
+	echo "Stop glustermg successfully!"
+    else
+	echo "Stop glustermg failure!"
+    fi
+ 
+    #pidof -c -o %PPID -x $COMPILE $GLUSTERMG_BIN $PORT  &> /dev/null
+    #[ $? -eq 0 ] &&  killproc $COMPILE $GLUSTERMG_BIN $PORT  &> /dev/null
+}
+
+status() 
+{
+    PID=`ps aux|grep "$COMPILE $GLUSTERMG_BIN $PORT$"|grep -v grep| head -1|awk '{print $2}'`
+    if [ ! -z $PID ]; then
+        echo "glustermg service is running with pid $PID"
+        exit 0
+    else
+        echo "glustermg service is not running"
+	exit 0
+    fi
+}
+
+### service arguments ###
+case $1 in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status
+        ;;
+    restart)
+        $0 stop
+        $0 start
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|status|restart}."
+        exit 1
+esac
+
+exit 0
