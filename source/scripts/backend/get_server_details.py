@@ -141,6 +141,8 @@ def getServerDetails(listall):
 
     interfaces = responseDom.createTag("networkInterfaces", None)
     for deviceName, values in NetworkUtils.getNetDeviceList().iteritems():
+        if values["type"] is None:
+            continue
         if values["type"].upper() in ['LOCAL', 'IPV6-IN-IPV4']:
             continue
 	if values["onboot"] and values["onboot"].upper() not in ['YES','"YES"', "'YES'"]:
