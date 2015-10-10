@@ -21,7 +21,7 @@ Installation
 
   # yum install mysql mysql-server memcached python-memcached python-webpy glusterfs glusterfs-server
 
-  # git clone https://github.com/hjimmy/glustermg.git
+  # git clone git@github.com:hjimmy/glustermg.git
   
   # cd glustermg 
   
@@ -42,6 +42,7 @@ Installation
 
   # sh /opt/glustermg/2.4/glustermg/scripts/gateway/sql/webpy_table.sh
 
+
 Test
 ===========
  curl --request GET --user neoadmin:neokylin123 https://10.1.110.86:8445/glustermg/1.0.0alpha/clusters --insecure 
@@ -49,3 +50,14 @@ Test
 For more info,read Gluster_Management_Gateway-1.0.0alpha-REST_API_Guide-en-US.pdf 
 
 
+Contribute code
+===========
+Add public key to user 
+
+#git clone git@github.com:hjimmy/glustermg.git
+
+# git add XXX
+
+# git commit 
+
+# git push
