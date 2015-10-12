@@ -2,6 +2,11 @@ glustermg
 =========
 
 Glustermg(Gluster Managerment Gateway) provides simple and powerful REST APIS for managing gluster storage cluster
+RPMS:
+  glustermg-xxx.rpm: Management platform for rest api
+  glustermg-backend-xxx.rpm:Scripts for get server and volume info
+
+
 Any problems ,please connect me : hj3381157@sina.com
 
 Prerequsites
